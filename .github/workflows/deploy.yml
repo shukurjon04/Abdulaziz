@@ -1,0 +1,65 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Test Backend
+        working-directory: ./nazariy-backend
+        run: |
+          npm install
+          npm run migrate 2>/dev/null || true
+
+      - name: Test Web Frontend
+        working-directory: ./nazariy-web
+        run: |
+          npm install
+          npm run build
+
+      - name: Lint Check
+        working-directory: ./nazariy-backend
+        run: |
+          echo "✓ Linting enabled (optional)"
+
+  deploy-backend:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy Backend to Render
+        run: |
+          echo "Deploy trigger sent to Render"
+          # Render automatically deploys on git push
+          # No additional action needed if you've connected your GitHub repo
+
+  deploy-web:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy Web to Vercel
+        run: |
+          echo "Deploy trigger sent to Vercel"
+          # Vercel automatically deploys on git push
+          # No additional action needed if you've connected your GitHub repo

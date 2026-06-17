@@ -1,0 +1,139 @@
+.navbar {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .navbar {
+  background: var(--gray-700);
+  border-bottom-color: var(--dark-border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-brand h1 {
+  font-size: 24px;
+  margin: 0;
+  white-space: nowrap;
+  color: var(--primary);
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-700);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+body.dark-mode .nav-link {
+  color: var(--gray-300);
+}
+
+.nav-link:hover {
+  background-color: var(--gray-100);
+  color: var(--primary);
+}
+
+body.dark-mode .nav-link:hover {
+  background-color: var(--gray-600);
+}
+
+.nav-link.active {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lang-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--dark-text);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+body.dark-mode .lang-select {
+  background-color: var(--gray-600);
+  color: var(--light-text);
+  border-color: var(--dark-border);
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--gray-100);
+}
+
+body.dark-mode .theme-toggle:hover {
+  background-color: var(--gray-600);
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 12px;
+  }
+
+  .navbar-menu {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .navbar-brand h1 {
+    font-size: 18px;
+  }
+
+  .navbar-actions {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
