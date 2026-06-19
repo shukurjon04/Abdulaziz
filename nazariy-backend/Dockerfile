@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Dependencies
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --only=production
 
 # Source code
 COPY src/ ./src/
