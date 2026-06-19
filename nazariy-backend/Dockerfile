@@ -8,7 +8,7 @@ RUN npm ci --only=production
 
 # Source code
 COPY src/ ./src/
-COPY uploads/ ./uploads/ 2>/dev/null || true
+RUN mkdir -p ./uploads
 
 # Port
 EXPOSE 4000
