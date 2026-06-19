@@ -5,12 +5,11 @@ services:
   mysql:
     image: mysql:8.0
     container_name: nazariy_mysql
-    env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root_password_change_me
+      MYSQL_DATABASE: nazariy
+      MYSQL_USER: nazariy_user
+      MYSQL_PASSWORD: user_password_change_me
     ports:
       - "3306:3306"
     volumes:
@@ -32,20 +31,19 @@ services:
     container_name: nazariy_backend
     ports:
       - "4000:4000"
-    env_file: .env
     environment:
-      NODE_ENV: ${NODE_ENV}
-      PORT: ${PORT}
+      NODE_ENV: development
+      PORT: 4000
       DB_HOST: mysql
-      DB_PORT: ${DB_PORT}
-      DB_USER: ${MYSQL_USER}
-      DB_PASSWORD: ${MYSQL_PASSWORD}
-      DB_NAME: ${MYSQL_DATABASE}
-      DB_POOL_SIZE: ${DB_POOL_SIZE}
-      JWT_SECRET: ${JWT_SECRET}
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      SUPER_ADMIN_TG_ID: ${SUPER_ADMIN_TG_ID}
-      FRONTEND_ORIGIN: ${VITE_API_URL}
+      DB_PORT: 3306
+      DB_USER: nazariy_user
+      DB_PASSWORD: user_password_change_me
+      DB_NAME: nazariy
+      DB_POOL_SIZE: 5
+      JWT_SECRET: dev_secret_key_do_not_use_in_production_change_this_to_long_random_string
+      TELEGRAM_BOT_TOKEN: YOUR_BOT_TOKEN_HERE
+      SUPER_ADMIN_TG_ID: 123456789
+      FRONTEND_ORIGIN: http://localhost:3000
     depends_on:
       mysql:
         condition: service_healthy
@@ -64,9 +62,8 @@ services:
     container_name: nazariy_web
     ports:
       - "3000:80"
-    env_file: .env
     environment:
-      VITE_API_URL: ${VITE_API_URL}
+      VITE_API_URL: http://localhost:4000
     depends_on:
       - backend
     networks:
