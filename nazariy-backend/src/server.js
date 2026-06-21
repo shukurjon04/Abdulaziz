@@ -1,9 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-require("express-async-errors"); // async route handlerlardagi xatolarni avtomatik next(err)ga yo'naltiradi
+require("express-async-errors");
 const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
+
+// Telegram Bot
+if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_BOT_TOKEN !== "YOUR_TELEGRAM_BOT_TOKEN_HERE") {
+  require("./bot");
+}
 
 const { generalLimiter, authLimiter, uploadLimiter } = require("./middleware/security");
 
