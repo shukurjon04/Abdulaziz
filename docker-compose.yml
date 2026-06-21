@@ -1,6 +1,41 @@
 version: '3.8'
 
 services:
+  # Nginx Reverse Proxy with SSL
+  nginx:
+    image: nginx:alpine
+    container_name: nazariy_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+    depends_on:
+      - backend
+      - web
+    networks:
+      - nazariy_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Certbot for SSL certificates
+  certbot:
+    image: certbot/certbot:latest
+    container_name: nazariy_certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: /bin/sh -c "certbot certonly --webroot -w /var/www/certbot -d nazariy.uz -d www.nazariy.uz --non-interactive --agree-tos --email admin@nazariy.uz --quiet || echo 'Certificate already exists or failed'"
+    networks:
+      - nazariy_network
+    restart: "no"
+
   # MySQL Database
   mysql:
     image: mysql:8.0
@@ -23,6 +58,7 @@ services:
       retries: 5
     networks:
       - nazariy_network
+    restart: unless-stopped
 
   # Backend API
   backend:
@@ -34,7 +70,7 @@ services:
       - "4000:4000"
     env_file: .env
     environment:
-      NODE_ENV: ${NODE_ENV}
+      NODE_ENV: production
       PORT: ${PORT}
       DB_HOST: mysql
       DB_PORT: ${DB_PORT}
@@ -45,7 +81,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       SUPER_ADMIN_TG_ID: ${SUPER_ADMIN_TG_ID}
-      FRONTEND_ORIGIN: ${VITE_API_URL}
+      FRONTEND_ORIGIN: https://${DOMAIN}
     depends_on:
       mysql:
         condition: service_healthy
@@ -66,7 +102,7 @@ services:
       - "3000:80"
     env_file: .env
     environment:
-      VITE_API_URL: ${VITE_API_URL}
+      VITE_API_URL: https://${DOMAIN}/api
     depends_on:
       - backend
     networks:
