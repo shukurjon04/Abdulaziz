@@ -68,12 +68,10 @@ npm install
 npm run dev      # http://localhost:5173
 ```
 
-**With Docker**:
+**With Docker (Recommended for Production)**:
 ```bash
-docker-compose up
-# Backend: http://localhost:4000
-# Web: http://localhost:3000
-# MySQL: localhost:3306
+docker-compose up -d --build
+# See SETUP.md for detailed instructions
 ```
 
 ### Testing
@@ -112,7 +110,23 @@ Login credentials (development):
 
 ## 📦 Deploy
 
-### Option 1: Render.com (Recommended — FREE)
+### 🐳 Option 1: Docker (Recommended — Complete Stack)
+
+**Production deployment with Nginx, SSL, and all services:**
+
+```bash
+cp .env.example .env
+nano .env  # Configure your domain and credentials
+docker-compose up -d --build
+```
+
+✅ **Includes**: Nginx reverse proxy, SSL/TLS, Backend, Frontend, MySQL  
+✅ **Works on**: Any server with Docker  
+✅ **Time**: ~2 minutes to setup
+
+**See [SETUP.md](SETUP.md) for complete Docker deployment guide.**
+
+### Option 2: Render.com (Recommended for Cloud)
 
 **Backend**:
 1. Push to GitHub
@@ -127,15 +141,11 @@ Login credentials (development):
 3. Publish: `dist`
 4. Deploy!
 
+### Option 3: Manual/VPS
+
 See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
-### Option 2: Docker
-
-```bash
-docker-compose up -d
-```
-
-### Option 3: Vercel (Web only)
+### Option 4: Vercel (Web only)
 
 ```bash
 cd nazariy-web

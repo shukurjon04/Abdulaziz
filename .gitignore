@@ -30,7 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 
 # Database
-*.sql
+# Ignore backups and dumps, but keep schema.sql
+backup.sql
+backup-*.sql
+dump.sql
+dump-*.sql
+!/nazariy-backend/src/schema.sql
 uploads/
 
 # Temporary
