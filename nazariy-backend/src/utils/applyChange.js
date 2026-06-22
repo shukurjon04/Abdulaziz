@@ -3,20 +3,6 @@ const { genId } = require("./id");
 
 const EMPTY_OPTIONS = JSON.stringify({ uz: ["", "", "", ""], ru: ["", "", "", ""], kril: ["", "", "", ""] });
 
-// Frontenddagi `applyChange(type, payload)` funksiyasining backend ekvivalenti.
-// PendingChange tasdiqlanganda yoki super admin to'g'ridan-to'g'ri amal bajarganda chaqiriladi.
-//
-// payload shakllari (frontend bilan bir xil):
-//   add_ticket:           { isPro, questionCount }
-//   delete_ticket:        { ticketId }
-//   toggle_ticket_pro:    { ticketId, isPro }
-//   edit_ticket_questions:{ ticketId, questions: [...] }
-//   add_topic:            { title:{uz,ru,kril}, color, icon? }
-//   delete_topic:         { topicId }
-//   add_rule_category:    { title:{uz,ru,kril}, color, icon? }
-//   add_rule_item:        { categoryId, item:{uz,ru,kril,desc?,image?} }
-//   delete_rule_item:     { itemId }
-
 async function applyChange(type, payload) {
   switch (type) {
     case "add_ticket": {
